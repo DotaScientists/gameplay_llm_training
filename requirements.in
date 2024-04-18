@@ -1,0 +1,19 @@
+loguru
+pydantic-settings == 2.1.*
+torch == 2.2.*
+transformers == 4.39.*
+sentencepiece == 0.1.*
+google-cloud-storage == 2.13.*
+retry == 0.9.*
+accelerate == 0.29.*
+trl == 0.8.*
+bitsandbytes == 0.43.*
+peft == 0.10.*
+
+# dev
+black
+mypy
+pytest
+pytest-cov
+pytest-env
+ruff

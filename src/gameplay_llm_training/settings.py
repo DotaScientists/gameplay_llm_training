@@ -24,8 +24,8 @@ class Settings(BaseSettings):
     train_args_per_device_train_batch_size: int = 1
     train_args_per_device_eval_batch_size: int = 1
     train_args_gradient_accumulation_steps: int = 1
-    train_args_num_train_epochs: int = 1
-    train_args_learning_rate: float = 5e-5
+    train_args_num_train_epochs: int = 20
+    train_args_learning_rate: float = 5e-4
 
 
     pretrained_model_name: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"

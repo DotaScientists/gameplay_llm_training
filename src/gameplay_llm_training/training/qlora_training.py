@@ -1,11 +1,11 @@
 from trl import SFTTrainer
 from datasets import Dataset
-from transformers import TrainingArguments, LlamaForCausalLM, BitsAndBytesConfig, LlamaTokenizer
+from transformers import TrainingArguments, LlamaForCausalLM, BitsAndBytesConfig, LlamaTokenizer, SchedulerType
 from gameplay_llm_training.settings import Settings
 from peft import LoraConfig
 from peft.utils.peft_types import PeftType, TaskType
 from loguru import logger
-
+from gameplay_llm_training.training.callbacks import LRCallback
 
 def train_llm(settings: Settings):
     quantization_config = BitsAndBytesConfig(load_in_4bit=True)
@@ -33,7 +33,13 @@ def train_llm(settings: Settings):
         gradient_accumulation_steps=settings.train_args_gradient_accumulation_steps,
         overwrite_output_dir=True,
         learning_rate=settings.train_args_learning_rate,
+        evaluation_strategy="epoch",
+        lr_scheduler_type=SchedulerType.LINEAR,
+        warmup_ratio=0.1,
+        dataloader_num_workers=2,
+        logging_strategy="epoch"
     )
+
     peft_config = LoraConfig(
         r=16,
         lora_alpha=32,
@@ -43,14 +49,15 @@ def train_llm(settings: Settings):
         task_type=TaskType.CAUSAL_LM,
 
     )
+    # TODO: don't forget to use the eval dataset
     trainer = SFTTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=eval_dataset,
+        eval_dataset=train_dataset,
         peft_config=peft_config,
         dataset_text_field="text",
-        tokenizer=tokenizer
+        tokenizer=tokenizer,
     )
     logger.info("Training model")
     trainer.train()

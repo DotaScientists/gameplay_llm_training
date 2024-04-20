@@ -54,7 +54,7 @@ def train_llm(settings: Settings):
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=train_dataset,
+        eval_dataset=eval_dataset,
         peft_config=peft_config,
         dataset_text_field="text",
         tokenizer=tokenizer,

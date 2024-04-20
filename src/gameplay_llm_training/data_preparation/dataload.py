@@ -47,8 +47,7 @@ def encode_text(
         "\n###\n".join([slot_data["instruction_prompt"], slot_data["data_prompt"], slot_data["text_data"]])
         for match_data in dataset.values() for slot_data in match_data.values()
     ]
-    # TODO: Don't forget to include all the text data in the dataset
-    dataset = Dataset.from_dict({"text": input_texts[: 10]})
+    dataset = Dataset.from_dict({"text": input_texts})
     return dataset
 
 

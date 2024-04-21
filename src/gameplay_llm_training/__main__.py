@@ -7,7 +7,7 @@ from gameplay_llm_training.training.qlora_training import train_llm
 def main():
     settings = Settings()
     gcs_connector = GCSConnector(settings.project_name)
-    # load_data(settings, gcs_connector)
+    load_data(settings, gcs_connector)
     train_llm(settings)
 
 if __name__ == "__main__":

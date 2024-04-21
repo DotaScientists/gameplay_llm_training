@@ -63,7 +63,7 @@ def train_llm(settings: Settings):
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
         peft_config=peft_config,
-        formatting_func=formatting_func,
+        formatting_func=formatting_prompts_func,
         tokenizer=tokenizer,
         dataset_batch_size=settings.training_args_dataset_batch_size,
     )

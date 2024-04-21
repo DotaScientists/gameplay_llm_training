@@ -1,5 +1,5 @@
 from trl import SFTTrainer
-from datasets import Dataset, load_dataset
+from datasets import Dataset, load_from_disk
 from transformers import TrainingArguments, LlamaForCausalLM, BitsAndBytesConfig, LlamaTokenizer, SchedulerType
 from gameplay_llm_training.settings import Settings
 from peft import LoraConfig
@@ -9,7 +9,7 @@ from loguru import logger
 def formatting_prompts_func(example):
     output_texts = []
     for i in range(len(example['instruction'])):
-        text = f"###{example['instruction'][i]}\n ### Data: {example['data'][i]} ### Response: {example['label'][i]}"
+        text = f"### {example['instruction'][i]}\n ### Data: {example['data'][i]} ### Response: {example['label'][i]}"
         output_texts.append(text)
     return output_texts
 
@@ -28,8 +28,8 @@ def train_llm(settings: Settings):
     )
     logger.info("Loading datasets")
 
-    train_dataset = load_dataset(str(settings.local_train_dataset_path), streaming=True)
-    eval_dataset = Dataset.load_from_disk(str(settings.local_val_dataset_path))
+    train_dataset = load_from_disk(str(settings.local_train_dataset_path))
+    eval_dataset = load_from_disk(str(settings.local_val_dataset_path))
 
     training_args = TrainingArguments(
         output_dir=str(settings.local_training_output_path),
@@ -50,11 +50,10 @@ def train_llm(settings: Settings):
     peft_config = LoraConfig(
         r=16,
         lora_alpha=32,
-        lora_dropout=0.05,
+        lora_dropout=0,
         bias="none",
         peft_type=PeftType.LORA,
         task_type=TaskType.CAUSAL_LM,
-
     )
 
     trainer = SFTTrainer(

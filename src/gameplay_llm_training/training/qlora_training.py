@@ -7,11 +7,12 @@ from peft.utils.peft_types import PeftType, TaskType
 from loguru import logger
 from gameplay_llm_training.training.callbacks import LRCallback
 
-
-def formatting_func(example):
-    text = f"###{example['instruction']}\n ### Data: {example['data']} ### Response: {example['label']}"
-    return text
-
+def formatting_prompts_func(example):
+    output_texts = []
+    for i in range(len(example['instruction'])):
+        text = f"###{example['instruction'][i]}\n ### Data: {example['data'][i]} ### Response: {example['label'][i]}"
+        output_texts.append(text)
+    return output_texts
 
 def train_llm(settings: Settings):
     quantization_config = BitsAndBytesConfig(load_in_4bit=True)

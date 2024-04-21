@@ -56,7 +56,6 @@ def train_llm(settings: Settings):
         task_type=TaskType.CAUSAL_LM,
 
     )
-
     trainer = SFTTrainer(
         model=model,
         args=training_args,
@@ -66,6 +65,7 @@ def train_llm(settings: Settings):
         formatting_func=formatting_prompts_func,
         tokenizer=tokenizer,
         dataset_batch_size=settings.training_args_dataset_batch_size,
+        packing=True,
     )
     logger.info("Training model")
     trainer.train()

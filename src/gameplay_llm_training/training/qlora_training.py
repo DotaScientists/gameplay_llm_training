@@ -7,6 +7,12 @@ from peft.utils.peft_types import PeftType, TaskType
 from loguru import logger
 from gameplay_llm_training.training.callbacks import LRCallback
 
+
+def formatting_func(example):
+    text = f"###{example['instruction']}\n ### Data: {example['data']} ### Response: {example['label']}"
+    return text
+
+
 def train_llm(settings: Settings):
     quantization_config = BitsAndBytesConfig(load_in_4bit=True)
     logger.info("Loading model")
@@ -33,10 +39,10 @@ def train_llm(settings: Settings):
         gradient_accumulation_steps=settings.train_args_gradient_accumulation_steps,
         overwrite_output_dir=True,
         learning_rate=settings.train_args_learning_rate,
-        evaluation_strategy="epoch",
         lr_scheduler_type=SchedulerType.LINEAR,
         warmup_ratio=0.1,
         dataloader_num_workers=2,
+        evaluation_strategy="epoch",
         logging_strategy="epoch"
     )
 
@@ -49,15 +55,16 @@ def train_llm(settings: Settings):
         task_type=TaskType.CAUSAL_LM,
 
     )
-    # TODO: don't forget to use the eval dataset
+
     trainer = SFTTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
         peft_config=peft_config,
-        dataset_text_field="text",
+        formatting_func=formatting_func,
         tokenizer=tokenizer,
+        dataset_batch_size=settings.training_args_dataset_batch_size,
     )
     logger.info("Training model")
     trainer.train()

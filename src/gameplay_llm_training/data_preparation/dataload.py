@@ -43,11 +43,19 @@ def split_dataset(dataset: dict[int, dict[int, dict[str, str]]], settings: Setti
 def encode_text(
         dataset: dict[int, dict[int, dict[str, str]]],
     )->Dataset:
-    input_texts = [
-        "\n###\n".join([slot_data["instruction_prompt"], slot_data["data_prompt"], slot_data["text_data"]])
+    instruction_prompts = [
+        slot_data["instruction_prompt"]
         for match_data in dataset.values() for slot_data in match_data.values()
     ]
-    dataset = Dataset.from_dict({"text": input_texts})
+    data_prompts = [
+        slot_data["data_prompt"]
+        for match_data in dataset.values() for slot_data in match_data.values()
+    ]
+    labels = [
+        slot_data["text_data"]
+        for match_data in dataset.values() for slot_data in match_data.values()
+    ]
+    dataset = Dataset.from_dict({"instruction": instruction_prompts, "data": data_prompts, "label": labels})
     return dataset
 
 

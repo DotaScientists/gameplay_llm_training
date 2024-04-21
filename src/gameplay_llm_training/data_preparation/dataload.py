@@ -59,7 +59,9 @@ def load_data(settings: Settings, gcs_connector: GCSConnector):
     logger.info(f"Total raw data size: {len(raw_data)}")
     logger.info("Splitting dataset")
     train_data, val_data, test_data = split_dataset(raw_data, settings)
-
+    logger.info(f"Train data matches: {len(train_data)}")
+    logger.info(f"Val data matches: {len(val_data)}")
+    logger.info(f"Test data matches: {len(test_data)}")
     logger.info("Encoding train dataset")
     train_dataset = encode_text(train_data)
     logger.info("Encoding val dataset")

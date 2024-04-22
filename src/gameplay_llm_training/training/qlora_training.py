@@ -6,6 +6,7 @@ from peft import LoraConfig
 from peft.utils.peft_types import PeftType, TaskType
 from loguru import logger
 
+
 def formatting_prompts_func(example):
     output_texts = []
     for i in range(len(example['instruction'])):
@@ -42,7 +43,9 @@ def train_llm(settings: Settings):
         learning_rate=settings.train_args_learning_rate,
         lr_scheduler_type=SchedulerType.LINEAR,
         warmup_ratio=0.1,
-        dataloader_num_workers=2,
+        dataloader_num_workers=settings.train_args_dataloader_num_workers,
+        dataloader_pin_memory=settings.train_args_dataloader_pin_memory,
+        dataloader_prefetch_factor=settings.train_args_dataloader_prefetch_factor,
         evaluation_strategy="epoch",
         logging_strategy="epoch"
     )
@@ -64,7 +67,6 @@ def train_llm(settings: Settings):
         peft_config=peft_config,
         formatting_func=formatting_prompts_func,
         tokenizer=tokenizer,
-        dataset_batch_size=settings.training_args_dataset_batch_size,
     )
     logger.info("Training model")
     trainer.train()

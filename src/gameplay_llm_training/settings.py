@@ -21,12 +21,14 @@ class Settings(BaseSettings):
     val_data_fraction: float = 0.1
     test_data_fraction: float = 0.1
 
-    train_args_per_device_train_batch_size: int = 10
+    train_args_per_device_train_batch_size: int = 5
     train_args_per_device_eval_batch_size: int = 1
     train_args_gradient_accumulation_steps: int = 1
     train_args_num_train_epochs: int = 5
     train_args_learning_rate: float = 5e-4
-    training_args_dataset_batch_size: int = 1000
+    train_args_dataloader_num_workers: int = 0
+    train_args_dataloader_pin_memory: bool = True
+    train_args_dataloader_prefetch_factor: int = 2
 
 
     pretrained_model_name: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"

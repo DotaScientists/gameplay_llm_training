@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     train_args_learning_rate: float = 5e-4
     train_args_dataloader_num_workers: int = 0
     train_args_dataloader_pin_memory: bool = True
-    train_args_dataloader_prefetch_factor: int = 2
+    train_args_dataloader_prefetch_factor: int | None = None
 
 
     pretrained_model_name: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"

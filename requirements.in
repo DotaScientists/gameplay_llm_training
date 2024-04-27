@@ -9,6 +9,7 @@ accelerate == 0.29.*
 trl == 0.8.*
 bitsandbytes == 0.43.*
 peft == 0.10.*
+packaging == 24.*
 
 # dev
 black

@@ -4,9 +4,7 @@
 #
 #    pip-compile --extra-index-url=https://download.pytorch.org/whl/cu118 --output-file=requirements.txt requirements.in
 #
---extra-index-url https://pypi.ngc.nvidia.com
 --extra-index-url https://download.pytorch.org/whl/cu118
---trusted-host pypi.ngc.nvidia.com
 
 accelerate==0.29.2
     # via
@@ -35,13 +33,6 @@ charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via black
-colorama==0.4.6
-    # via
-    #   click
-    #   loguru
-    #   pytest
-    #   tqdm
-    #   tyro
 coverage[toml]==7.4.4
     # via pytest-cov
 datasets==2.14.4
@@ -54,15 +45,12 @@ dill==0.3.7
     #   multiprocess
 docstring-parser==0.16
     # via tyro
-einops==0.7.0
-    # via flash-attn
 filelock==3.13.3
     # via
     #   huggingface-hub
     #   torch
     #   transformers
-flash-attn==2.5.7
-    # via -r requirements.in
+    #   triton
 frozenlist==1.4.1
     # via
     #   aiohttp
@@ -132,8 +120,6 @@ mypy-extensions==1.0.0
     #   mypy
 networkx==3.3
     # via torch
-ninja==1.11.1.1
-    # via flash-attn
 numpy==1.26.4
     # via
     #   accelerate
@@ -144,12 +130,37 @@ numpy==1.26.4
     #   pyarrow
     #   transformers
     #   trl
+nvidia-cublas-cu11==11.11.3.6
+    # via
+    #   nvidia-cudnn-cu11
+    #   nvidia-cusolver-cu11
+    #   torch
+nvidia-cuda-cupti-cu11==11.8.87
+    # via torch
+nvidia-cuda-nvrtc-cu11==11.8.89
+    # via torch
+nvidia-cuda-runtime-cu11==11.8.89
+    # via torch
+nvidia-cudnn-cu11==8.7.0.84
+    # via torch
+nvidia-cufft-cu11==10.9.0.58
+    # via torch
+nvidia-curand-cu11==10.3.0.86
+    # via torch
+nvidia-cusolver-cu11==11.4.1.48
+    # via torch
+nvidia-cusparse-cu11==11.7.5.86
+    # via torch
+nvidia-nccl-cu11==2.19.3
+    # via torch
+nvidia-nvtx-cu11==11.8.86
+    # via torch
 packaging==24.0
     # via
+    #   -r requirements.in
     #   accelerate
     #   black
     #   datasets
-    #   flash-attn
     #   huggingface-hub
     #   peft
     #   pytest
@@ -249,7 +260,6 @@ torch==2.2.2+cu118
     #   -r requirements.in
     #   accelerate
     #   bitsandbytes
-    #   flash-attn
     #   peft
     #   trl
 tqdm==4.66.2
@@ -263,6 +273,8 @@ transformers==4.39.3
     #   -r requirements.in
     #   peft
     #   trl
+triton==2.2.0
+    # via torch
 trl==0.8.3
     # via -r requirements.in
 typing-extensions==4.10.0
@@ -279,8 +291,6 @@ tzdata==2024.1
     # via pandas
 urllib3==2.2.1
     # via requests
-win32-setctime==1.1.0
-    # via loguru
 xxhash==3.4.1
     # via datasets
 yarl==1.9.4

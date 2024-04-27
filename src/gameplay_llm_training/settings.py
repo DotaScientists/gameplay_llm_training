@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     local_test_dataset_path: Path = PROJECT_ROOT / "data/test_dataset"
     local_training_output_path: Path = PROJECT_ROOT / "data/training_output"
     local_logs_path: Path = PROJECT_ROOT / "data/logs"
+    local_model_save_path: Path = PROJECT_ROOT / "data/trained_model"
 
 
     cloud_data_path: str = "gs://test_dota2_data/db/sqllite/main.db"
@@ -21,14 +22,15 @@ class Settings(BaseSettings):
     val_data_fraction: float = 0.1
     test_data_fraction: float = 0.1
 
-    train_args_per_device_train_batch_size: int = 5
+    train_args_per_device_train_batch_size: int = 2
     train_args_per_device_eval_batch_size: int = 1
     train_args_gradient_accumulation_steps: int = 1
     train_args_num_train_epochs: int = 5
     train_args_learning_rate: float = 5e-4
-    train_args_dataloader_num_workers: int = 0
-    train_args_dataloader_pin_memory: bool = True
+    train_args_dataloader_num_workers: int = 8
+    train_args_dataloader_pin_memory: bool = False
     train_args_dataloader_prefetch_factor: int | None = None
+    train_args_max_seq_length: int = 1500
 
 
     pretrained_model_name: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"

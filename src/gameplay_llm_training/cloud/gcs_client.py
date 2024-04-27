@@ -152,3 +152,37 @@ class GCSConnector:
         bucket = self.storage_client.get_bucket(bucket_name)
         blob = bucket.blob(cloud_file_path)
         blob.upload_from_filename(local_file_path)
+
+    def upload_folder(self, local_folder_path: Path, cloud_folder_path: str) -> None:
+        """
+        Uploads a folder to storage with all files in it
+        :param local_folder_path:
+        :param cloud_folder_path:
+        :return:
+        """
+        bucket_name, cloud_folder_path = self._parse_cloud_path(cloud_folder_path)
+        bucket = self.storage_client.get_bucket(bucket_name)
+        for root, _, files in os.walk(local_folder_path):
+            for file in files:
+                full_file_path = os.path.join(root, file)
+                cloud_suffix = full_file_path.removeprefix(str(local_folder_path))
+                cloud_suffix = cloud_suffix.replace("\\", "/")
+                cloud_file_path = cloud_folder_path + cloud_suffix
+                blob = bucket.blob(cloud_file_path)
+                blob.upload_from_filename(full_file_path)
+
+
+    def list_folders(self, cloud_folder_path: str) -> set[str]:
+        """
+        Returns a list of all folders in the folder
+        :param cloud_folder_path: Cloud path to folder
+        :return:
+        """
+        bucket_name, cloud_folder_path = self._parse_cloud_path(cloud_folder_path)
+        bucket = self.storage_client.get_bucket(bucket_name)
+        prefix = cloud_folder_path + "/"
+        blobs_list = bucket.list_blobs(prefix=prefix)
+        blob_names = [blob.name for blob in blobs_list]
+        folder_names = [name.removeprefix(prefix).split("/")[0] for name in blob_names]
+        unique_folder_names = set(filter(lambda x: x, folder_names))
+        return unique_folder_names

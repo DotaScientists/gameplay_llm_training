@@ -15,6 +15,8 @@ class Settings(BaseSettings):
 
 
     cloud_data_path: str = "gs://test_dota2_data/db/sqllite/main.db"
+    cloud_training_artifacts_path: str = "gs://test_dota2_data/training/tinylama"
+
 
     project_name: str = "robust-doodad-416318"
 
@@ -25,12 +27,14 @@ class Settings(BaseSettings):
     train_args_per_device_train_batch_size: int = 2
     train_args_per_device_eval_batch_size: int = 1
     train_args_gradient_accumulation_steps: int = 1
-    train_args_num_train_epochs: int = 5
-    train_args_learning_rate: float = 5e-4
+    train_args_num_train_epochs: int = 10
+    train_args_learning_rate: float = 1e-3
     train_args_dataloader_num_workers: int = 8
     train_args_dataloader_pin_memory: bool = False
     train_args_dataloader_prefetch_factor: int | None = None
     train_args_max_seq_length: int = 1500
+
+
 
 
     pretrained_model_name: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"

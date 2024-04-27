@@ -8,6 +8,19 @@ from peft.utils.peft_types import PeftType, TaskType
 from loguru import logger
 from peft import get_peft_model
 from gameplay_llm_training.data_preparation.data_preparation import formatting_prompts_func
+from gameplay_llm_training.cloud.gcs_client import GCSConnector
+
+
+def upload_artifacts(gsc_connector: GCSConnector, settings: Settings):
+    training_runs = gsc_connector.list_folders(settings.cloud_training_artifacts_path)
+    if not training_runs:
+        run_number = 0
+    else:
+        run_number = max([int(folder_name) for folder_name in training_runs])
+        run_number += 1
+    run_cloud_folder = f"{settings.cloud_training_artifacts_path}/{run_number}"
+    gsc_connector.upload_folder(settings.local_logs_path, f"{run_cloud_folder}/logs")
+    gsc_connector.upload_folder(settings.local_model_save_path, f"{run_cloud_folder}/model")
 
 
 
@@ -51,7 +64,8 @@ def train_llm(settings: Settings):
         logging_strategy="steps",
         logging_steps=2000,
         gradient_checkpointing=False,
-        save_total_limit=3
+        save_total_limit=3,
+        report_to="tensorboard"
     )
 
 
@@ -79,6 +93,10 @@ def train_llm(settings: Settings):
     logger.info("Training model")
     trainer.train()
     trainer.save_model(str(settings.local_model_save_path))
+
+
+
+
 
 
 # Base
